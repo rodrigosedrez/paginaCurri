@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da Forca</title>
+    <style>
+        #megaDiv{
+            border:rgb(63, 63, 63), solid;
+            border-radius: 40px;
+        }
+        #h1title {
+            color:aliceblue;
+            font-size: 60px;
+        }
+        body{
+            background-color: rgb(125, 112, 163);
+            background-repeat:no-repeat;
+            background-position: 60px top;
+            background-position-y: 100px;
+
+        }
+        
+        
+        #digite{
+            color: rgb(56, 0, 0);
+            line-height: 0.1;
+        }
+        #letraJ{
+            text-align:center;
+        color:rgb(255, 255, 255);
+        font-weight: bold;
+        font-size: 66px;
+        background-color:rgb(189, 139, 127);
+        width: 100px;
+        height:70px;
+        position: absolute;
+        left: 60px;
+        top: 60px;
+        text-transform: uppercase;
+        }
+        
+        #enterTxt{
+            width:220px;
+            height:160px;
+            position:absolute;
+            left: 580px;
+            top: 250px;
+            background-size: cover;
+            border: 2px solid rgb(255, 255, 255);
+            border-radius: 25px;
+            background:linear-gradient(rgb(235, 198, 151),rgb(161, 33, 33));
+        }
+        #dv1{
+            width: 200px;
+            height: 360px;
+            position:absolute;
+            left: 060px;
+            top: 220px;
+            background-size:cover;
+            background-image: url(./imgForca/forca.png);
+            
+            
+        }
+        #cabeca{
+            width: auto;
+            height: 50%;
+            position:absolute;
+            left: 103px;
+            top: 170px;
+            display: none;
+            
+        }
+        #corpo{
+            width: auto;
+            height: 50%;
+            position:absolute;
+            left: 103px;
+            top: 170px;
+            display: none;    
+        }
+        #pernas{
+            width: auto;
+            height: 50%;
+            position:absolute;
+            left: 103px;
+            top: 170px;
+            display: none;   
+        }
+        #enforcado{
+            width: auto;
+            height: 50%;
+            position:absolute;
+            left: 103px;
+            top: 170px;
+            display: none; 
+        }
+        #dv2{
+            width: 700px;
+            height: 520px;
+            position:absolute;
+            left: 403px;
+            top: 470px;
+            background-size: cover;   
+        }
+        .wordS{
+            width: 50px;
+            height: 50px;
+            font-size: 49px;
+            text-align: center;
+            display:none;
+            text-transform: uppercase;
+            background-color:rgba(255, 217, 167, 0.493) ;
+            color: rgb(255, 255, 255);
+            font-weight: bold;
+        }
+        #dica{
+            color: black;
+            font-size: 44px;
+            letter-spacing: 10px;
+            line-height: 0.5;
+        }
+        #word{
+            color: white;
+            font-size: 66px;
+            line-height: 2.1;
+            letter-spacing: 33px;
+        }
+        #line{
+            color: white;
+            font-size: 74px;
+            line-height: 4.7;
+            letter-spacing: 40px;
+        }
+        #novoJ{
+            color: white;
+            font-size: 25px;
+            font-weight: bold;
+            position: relative;
+            border: 2px solid rgb(255, 255, 255);
+            border-radius: 15px;
+            left: 573px;
+            top: 250px;
+            width: 349px;
+            height: 40px;
+            background:linear-gradient(rgb(161, 33, 33),rgb(235, 198, 151))
+        }
+        #btGo{
+            letter-spacing: 0.1px;
+            color: white;
+            font-size: 65px;
+            width: 120px;
+            height: 160px;
+            position:absolute;
+            left: 810px;
+            top: 250px;
+            background-size: cover;
+            border: 2px solid rgb(255, 255, 255);
+            border-radius: 25px;
+            background:linear-gradient(rgb(161, 33, 33),rgb(235, 198, 151))
+        }
+        #btGo:hover{
+            border: 3px solid rgb(126, 65, 65);
+            background:linear-gradient(rgb(235, 198, 151),rgb(197, 71, 71))
+        }
+        #btGo:active{
+            background:linear-gradient(rgb(63, 63, 63),rgb(197, 71, 71));
+            
+        }
+    </style>
+
+<script>
+    var words =["ABOBORA","MONITOR","RELOGIO","NARUTO","VINHO","CACHORRO","GATO","LAMPADA",
+    "PIZZA","PIPOCA","SORVETE","AVEIA","LEITE","CARNE","CARRO","CASA","PRATELEIRA","NOTEBOOK",
+    "CELULAR","QUARTO","LIVRO","COMPUTADOR","HEROI","BARCO","VELA","REMO","COBRA","AMBURGER"]
+        var wordsNum = words.length-1
+        var pos= Math.round(Math.random()*wordsNum)
+        var palavra= words[pos]
+        var tm=palavra.length
+        var cxLetras=[]
+        var acertos
+        var errosMax=4
+        var erros=0
+        var desenhos=[]
+        var acertou= false
+        var jogando= false
+        var jog
+
+        
+        function defineLetras(L){
+            var obj
+            for (let i = 0; i < 20; i++) {
+                obj=document.getElementById("word"+i).value=""
+                obj=document.getElementById("word"+i).style.display="none" 
+            }
+            for (let i = 0; i<L; i++) {
+                obj=document.getElementById("word"+i).style.display="inline-block" 
+            }
+        }
+        function jogar(){
+            jog=document.getElementById("letraJ")
+            jog.focus()
+            if(jog.value==""){
+                alert("Digite uma letra")
+            }else{
+                if(jogando){
+                    var jog
+                    var obj
+                    var letraTmp
+                    var letra
+                    var pesq
+                    letra=jog.value.toUpperCase()
+                    jog.value=""
+                    pesq=palavra.match(letra)
+                    acertou=false
+                    while(pesq!=null){
+                        letraTmp=palavra.search(letra)
+                        obj=document.getElementById("word"+letraTmp).value=letra 
+                        palavra=palavra.replace(letra,'0')
+                        acertos++
+                        pesq=palavra.match(letra)
+                        acertou=true
+                    }if (!acertou){
+                        document.getElementById("dvletrasdigitadas").innerHTML+=letra.toUpperCase()
+                        erros++
+                        if(erros<5){
+                            desenhos[erros].style.display="block"
+                        }
+                        else{
+                            //document.getElementById("cabeca").src="./imgForca/head.png"
+                            document.getElementById("dvmsg").innerHTML="PERDEU"+"<br>"+palavra
+                            jogando=false
+
+                        }
+                    }
+                    if (acertos==tm){
+                        document.getElementById("dvmsg").innerHTML=""
+                        document.getElementById("dvmsg").innerHTML="GANHOU"
+                        jogando=false
+                    }
+                }
+            }
+        }
+            function inicia(){
+                jogando=true
+                jog=document.getElementById("letraJ")
+                jog.value=""
+                jog.focus()
+                acertos=0
+                erros=0
+                acertou=false
+                document.getElementById("dvletrasdigitadas").innerHTML="Letras Digitadas: "
+                pos=Math.round(Math.random()*wordsNum)
+                palavra=words[pos]
+                tm=palavra.length
+                defineLetras(tm)
+                document.getElementById("dvmsg").innerHTML=""
+                desenhos[1]=document.getElementById("cabeca")
+                desenhos[2]=document.getElementById("corpo")
+                desenhos[3]=document.getElementById("pernas")
+                desenhos[4]=document.getElementById("enforcado")
+                document.getElementById("cabeca").src="./imgForca/head.png"
+                for (var i = 1; i <5; i++) {
+                    desenhos[i].style.display="none"
+                }
+            }
+        window.addEventListener("load",inicia)
+</script>
+    
+</head>
+<body>
+    <div id="megaDiv">
+        <center>
+            <h1 id="h1title">Jogo da forca</h1></br>
+        </center>
+    <button id="btGo" onclick="jogar()">GO</button>
+    <button id="novoJ" onclick="inicia()" >NOVO JOGO</button>
+    <div id="enterTxt">
+        <center>
+            <h2><p id="digite">Digite uma letra</p></h2>
+            <input type="text" id="letraJ" maxlength="1">
+        </center>
+    </div>
+    
+ <div id="dv1">
+     <img src="./imgForca/head.png" alt="" class="imgs" id="cabeca">
+     <img src="./imgForca/no arm and legs.png" alt="" class="imgs" id="corpo">
+     <img src="./imgForca/no legs.png" alt="" class="imgs" id="pernas">
+     <img src="./imgForca/enforcado.png" alt="" class="imgs" id="enforcado">
+ </div>
+ <div id="dv2">
+     <h1> <center>  
+         <div>
+             <input type="text" class="wordS" id="word0" maxlength="1">
+             <input type="text" class="wordS" id="word1" maxlength="1">
+             <input type="text" class="wordS" id="word2" maxlength="1">
+             <input type="text" class="wordS" id="word3" maxlength="1">
+             <input type="text" class="wordS" id="word4" maxlength="1">
+             <input type="text" class="wordS" id="word5" maxlength="1">
+             <input type="text" class="wordS" id="word6" maxlength="1">
+             <input type="text" class="wordS" id="word7" maxlength="1">
+             <input type="text" class="wordS" id="word8" maxlength="1">
+             <input type="text" class="wordS" id="word9" maxlength="1">
+             <input type="text" class="wordS" id="word10" maxlength="1">
+             <input type="text" class="wordS" id="word11" maxlength="1">
+             <input type="text" class="wordS" id="word12" maxlength="1">
+             <input type="text" class="wordS" id="word13" maxlength="1">
+             <input type="text" class="wordS" id="word14" maxlength="1">
+             <input type="text" class="wordS" id="word15" maxlength="1">
+             <input type="text" class="wordS" id="word16" maxlength="1">
+             <input type="text" class="wordS" id="word17" maxlength="1">
+             <input type="text" class="wordS" id="word18" maxlength="1">
+             <input type="text" class="wordS" id="word19" maxlength="1">
+         </div>
+         <h1><div id="dvmsg"></div></h1><br>
+        <div id="dvletrasdigitadas">Letras Digitadas: </div>  
+        </center>
+     </h1>
+ </div>
+    
+
+</body>
+</div>
+</div>
+</html>
